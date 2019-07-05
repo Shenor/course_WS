@@ -14,12 +14,27 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', 'views');
 
+app.use(express.static('public'));
+
 app.get('/', (req, res) => {
-    res.render('index');
+    res.render('index', {
+        title: "Главная страница",
+        isHome: true
+    });
 });
 
-app.get('/about', (req, res) => {
-    res.render('about');
+app.get('/products', (req, res) => {
+    res.render('products', {
+        title: "Товары",
+        isProducts: true
+    });
+});
+
+app.get('/add', (req, res) => {
+    res.render('addProducts', {
+        title: "Добавить товар",
+        isAdd: true
+    });
 });
 
 app.listen(port, () => console.log(`Example app listening on port: ${port}!`))
