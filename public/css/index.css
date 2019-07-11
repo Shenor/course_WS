@@ -1,6 +1,16 @@
-nav {
-  background: #0277bd !important; }
-  nav .nav-wrapper {
-    padding: 0 2rem; }
+nav { background: #0277bd !important; }
+nav .nav-wrapper { padding: 0 2rem; }
+
+.btn-primaly { background-color: #0277bd !important; }
+
+.product { width: 100%; display: flex; flex-direction: column; align-items: center; }
+.product h1 { margin-bottom: 2rem; }
+.product img { max-width: 600px; height: auto; }
+.product .price.big { font-size: 2.5rem; }
+
+.price { font-size: 1.8rem; }
+
+.card-action.actions { display: flex; align-items: center; justify-content: space-between; }
+.card-action.actions .btn-primary { background-color: #0277bd !important; }
 
 /*# sourceMappingURL=index.css.map */
