@@ -32,8 +32,11 @@ app.use('/card', cardRoutes);
 
 (async function start() {
     try {
-        const url = 'mongodb+srv://user:9pNeDUpB7f3YsUhX@cluster0-hsbci.mongodb.net/test?retryWrites=true&w=majority';
-        await mongoose.connect(url, {useNewUrlParser: true});
+        const url = 'mongodb+srv://user:9pNeDUpB7f3YsUhX@cluster0-hsbci.mongodb.net/shop';
+        await mongoose.connect(url, {
+            useNewUrlParser: true,
+            useFindAndModify: false
+        });
         app.listen(port, () => console.log(`Example app listening on port: ${port}!`))
     } catch (e) {
         console.log(e);

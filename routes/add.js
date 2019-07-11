@@ -11,11 +11,15 @@ router.get("/", (req, res) => {
 
 router.post('/', async (req, res) => {
     const {title, price, img} = req.body;
-    const product = new Product(title, price, img);
+    console.log(req.body);
+    const product = new Product(req.body);
 
-    await product.save();
-
-    res.redirect('/products');
+    try {
+        await product.save();
+        res.redirect('/products');
+    } catch (error) {
+        console.log(error);
+    }   
 });
 
 module.exports = router;

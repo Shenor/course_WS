@@ -4,7 +4,7 @@ const Card = require('../models/card');
 const Product = require('../models/product');
 
 router.post('/add', async (req, res) => {
-    const product = await Product.getByID(req.body.id);
+    const product = await Product.findById(req.body.id);
     await Card.add(product);
     res.redirect("/card");
 });
