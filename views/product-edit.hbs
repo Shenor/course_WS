@@ -17,12 +17,14 @@
           <span class="helper-text" data-error="Введите URL"></span>
     </div>
 
+      <input type="hidden" name="_csrf" value="{{ csrf }}">
       <input type="hidden" name="id" value="{{ product.id }}">
 
     <button type="submit" class="btn btn-primaly">Редактировать товар</button>
 </form>
 
 <form action="/products/remove" method="POST">
+      <input type="hidden" name="_csrf" value="{{ csrf }}">
       <input type="hidden" name="id" value="{{ product.id }}">
       <button class="btn red">Удалить курс</button>
 </form>

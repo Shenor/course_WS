@@ -3,19 +3,30 @@ const mongoose = require('mongoose');
 const exphbs = require('express-handlebars');
 const morgan = require('morgan');
 const path = require('path');
+const csrf = require('csurf');
+const flash = require('connect-flash');
+const session = require('express-session');
+const MongoStore = require('connect-mongodb-session')(session);
 
 const homeRoutes = require('./routes/home');
 const cardRoutes = require('./routes/card');
 const productsRoutes = require('./routes/products');
 const addRoutes = require('./routes/add');
+const ordersRoutes = require('./routes/orders');
+const authRoutes = require('./routes/auth');
+
+const vatMiddleware = require('./middleware/variables');
+const userMiddleware = require('./middleware/user');
+const keys = require('./keys');
 
 const app = express();
-const port = 3000;
-const password = '9pNeDUpB7f3YsUhX';
-
 const hbs = exphbs.create({
     defaultLayout: "main",
     extname: "hbs"
+});
+const store = new MongoStore({
+    collection: 'sessions',
+    uri: keys.MONGODB_URI
 });
 
 app.engine('hbs', hbs.engine);
@@ -25,19 +36,31 @@ app.set('views', 'views');
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({extended: true}));
+app.use(session({
+    secret: keys.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store
+}));
+app.use(csrf());
+app.use(flash());
+app.use(vatMiddleware);
+app.use(userMiddleware);
+
 app.use('/', homeRoutes);
 app.use('/products', productsRoutes);
 app.use('/add', addRoutes);
 app.use('/card', cardRoutes);
+app.use('/orders', ordersRoutes);
+app.use('/auth', authRoutes);
 
 (async function start() {
     try {
-        const url = 'mongodb+srv://user:9pNeDUpB7f3YsUhX@cluster0-hsbci.mongodb.net/shop';
-        await mongoose.connect(url, {
+        await mongoose.connect(keys.MONGODB_URI, {
             useNewUrlParser: true,
             useFindAndModify: false
         });
-        app.listen(port, () => console.log(`Example app listening on port: ${port}!`))
+        app.listen(3000, () => console.log(`Example app listening on port: 3000!`))
     } catch (e) {
         console.log(e);
     }
