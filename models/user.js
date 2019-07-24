@@ -6,6 +6,7 @@ const user = new Schema({
         required: true
     },
     name: String,
+    avatarUrl: String,
     resetToken: String,
     resetTokenExp: Date,
     password: {

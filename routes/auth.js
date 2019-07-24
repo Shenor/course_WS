@@ -1,11 +1,13 @@
 const {Router} = require('express');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const {validationResult} = require('express-validator');
 const nodemailer = require('nodemailer');
 const sendgrid = require('nodemailer-sendgrid-transport');
 const regEmail = require('../email/registration');
 const resetEmail = require('../email/reset');
 const keys = require('../keys');
+const {registerValidators} = require('../utils/validators');
 const router = Router();
 
 const User = require('./../models/user');
@@ -60,21 +62,21 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', registerValidators, async (req, res) => {
     try {
-        const {email, password, repeat, name} = req.body;
-        const candidate = await User.findOne({ email });
+        const {email, password, name} = req.body;    
+        const errors = validationResult(req);
 
-        if(candidate) {
-            req.flash('registerError', 'Пользователь с таким email уже существует!');
-            res.redirect("/auth/login#register");
-        } else {
-            const hashPassword = await bcrypt.hash(password, 10);
-            const user = new User({email, name, password: hashPassword, cart: {items: []}});
-            await user.save();
-            res.redirect("/auth/login#login");
-            await transporter.sendMail(regEmail(email));
+        if (!errors.isEmpty()){
+            req.flash('registerError', errors.array()[0].msg);
+            return res.status(422).redirect('/auth/login#register');
         }
+    
+        const hashPassword = await bcrypt.hash(password, 10);
+        const user = new User({email, name, password: hashPassword, cart: {items: []}});
+        await user.save();
+        res.redirect("/auth/login#login");
+        await transporter.sendMail(regEmail(email));
     } catch (error) {
         console.log(error)
     }
@@ -99,7 +101,6 @@ router.get('/password/:token', async (req, res) => {
         });
 
         if(!user){
-            console.log("2222222222222222222");
             return res.redirect('/auth/login');
         } else {
             res.render('auth/password', {

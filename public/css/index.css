@@ -13,6 +13,8 @@ nav .nav-wrapper { padding: 0 2rem; }
 
 .auth { padding-top: 1rem; }
 
+.avatar { max-width: 300px; height: auto; }
+
 .alert { padding: 1rem 5rem; border-radius: 10px; text-align: center; margin-bottom: .8rem; background: rgba(255, 0, 0, 0.3); color: red; }
 
 /*# sourceMappingURL=index.css.map */

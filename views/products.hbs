@@ -16,7 +16,11 @@
           <a href="/products/{{ id }}" target="_blank">Подробнее</a>
 
           {{#if @root.isAuth}}
+
+          {{#ifeq userId._id  @root.userId}}
           <a href="/products/{{ id }}/edit?allow=true">Редактировать</a>
+          {{/ifeq}}
+
           <form action="/card/add" method="POST">
             <input type="hidden" name="id" value="{{id}}">
             <input type="hidden" name="_csrf" value="{{ @root.csrf }}">
