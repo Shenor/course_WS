@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const exphbs = require('express-handlebars');
-const morgan = require('morgan');
+// const morgan = require('morgan');
 const helmet = require('helmet');
 const path = require('path');
 const csrf = require('csurf');
@@ -38,7 +38,7 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', 'views');
 
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/images", express.static(path.join(__dirname, 'images')));
 app.use(express.urlencoded({extended: true}));
